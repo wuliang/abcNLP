@@ -20,7 +20,7 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
  + use: sqlite3
 
 * Usage
-  - for example:   	
+  - for example :   	
    :   abc = abcChineseChar()    
    :   for word in abc.getHxWords(u'茉莉花',  maxnum=5):
    :       print word    
@@ -31,7 +31,7 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
    : 苿萂芘
    : 炗峲芘
    : 苿峲芭
-
+    (~:use tempory db, need to refine~)
 
 * Develope / Design
  
@@ -45,81 +45,81 @@ The variant of a character is alao a valid character. It can be seen
 as another shape (form) of original one. But some of forms are rare
 used nowdays.
 
-㒲 --> 財 
-㒲 --> 才 
-㒲 --> 财 
-㒲 --> 纔 
-㒷 --> 興 
-㒷 --> 兴 
-㓁 --> 网 
-㓁 --> 網 
-㓁 --> 罔
+ : 㒲 --> 財 
+ : 㒲 --> 才 
+ : 㒲 --> 财 
+ : 㒲 --> 纔 
+ : 㒷 --> 興 
+ : 㒷 --> 兴 
+ : 㓁 --> 网 
+ : 㓁 --> 網 
+ : 㓁 --> 罔
 
  
 *** Use Character with same reading(Pinyin)
 In the following list, value in brackets is score for the replacement.
 More small, more better.
 
-㐲 --> dài (0) * Pinyin is a special type
-㐲 --> 大 (3)
-㐲 --> 代 (5)
-㐲 --> 黱 (22)
+ : 㐲 --> dài (0) * Pinyin is a special type
+ : 㐲 --> 大 (3)
+ : 㐲 --> 代 (5)
+ : 㐲 --> 黱 (22)
 
-㐳 --> wù (0)
-㐳 --> 兀 (3)
-㐳 --> 乌 (4)
-㐳 --> 鼿 (17)
+ : 㐳 --> wù (0)
+ : 㐳 --> 兀 (3)
+ : 㐳 --> 乌 (4)
+ : 㐳 --> 鼿 (17)
 
 *** Split Character to two or three parts
 After split character, each of its part can be further replaced with its similar
 character, which has ending mark of “1” in the following list.
      
-川 --> <丿丨丨> 0
-巧 --> <工丂> 0
-垛 --> <土朶> 1
-垜 --> <土朵> 1
-⽻ --> <習習> 1
-⾽ --> <镸三> 1
-䜌 --> <⺯讠⺯> 1
-丬 --> <氷丨> 1
-乢 --> <山隠> 1
-乣 --> <庅乚> 1
-乨 --> <枱乚> 1
-乩 --> <佔乚> 1
-⽻ --> <习习> 0
-⾽ --> <镸彡> 0
-丬 --> <冫丨> 0
-乢 --> <山乚> 0
-乣 --> <幺乚> 0
-乨 --> <台乚> 0
-乩 --> <占乚> 0
-亿 --> <亻乙> 0
-什 --> <亻十> 0
-仁 --> <亻二> 0
-亿 --> <人乙> 1
-什 --> <人十> 1
-仁 --> <人二> 1
-仂 --> <人力> 1
-仃 --> <人丁> 1
-仅 --> <人又> 1
-仆 --> <人卜> 1
-仇 --> <人九> 1
+ : 川 --> <丿丨丨> 0
+ : 巧 --> <工丂> 0
+ : 垛 --> <土朶> 1
+ : 垜 --> <土朵> 1
+ : ⽻ --> <習習> 1
+ : ⾽ --> <镸三> 1
+ : 䜌 --> <⺯讠⺯> 1
+ : 丬 --> <氷丨> 1
+ : 乢 --> <山隠> 1
+ : 乣 --> <庅乚> 1
+ : 乨 --> <枱乚> 1
+ : 乩 --> <佔乚> 1
+ : ⽻ --> <习习> 0
+ : ⾽ --> <镸彡> 0
+ : 丬 --> <冫丨> 0
+ : 乢 --> <山乚> 0
+ : 乣 --> <幺乚> 0
+ : 乨 --> <台乚> 0
+ : 乩 --> <占乚> 0
+ : 亿 --> <亻乙> 0
+ : 什 --> <亻十> 0
+ : 仁 --> <亻二> 0
+ : 亿 --> <人乙> 1
+ : 什 --> <人十> 1
+ : 仁 --> <人二> 1
+ : 仂 --> <人力> 1
+ : 仃 --> <人丁> 1
+ : 仅 --> <人又> 1
+ : 仆 --> <人卜> 1
+ : 仇 --> <人九> 1
 
 *** Choose a character looks like the origion. ( AI ?)
 The score smaller is the better. 
-⺡ --> ⺍ (1)
-⺡ --> 乊 (3)
-⺡ --> 丬 (3)
-⺡ --> 习 (4)
-⺡ --> 乥 (8)
-⺆ --> ⼌ (2)
-⺆ --> ⼓ (3)
-⺆ --> ⼏ (4)
-⺆ --> 九 (4)
-丨 --> ⼁ (0)
-丨 --> ⼃ (2)
-丨 --> 丿 (2)
-丨 --> ⼅ (2)
+ : ⺡ --> ⺍ (1)
+ : ⺡ --> 乊 (3)
+ : ⺡ --> 丬 (3)
+ : ⺡ --> 习 (4)
+ : ⺡ --> 乥 (8)
+ : ⺆ --> ⼌ (2)
+ : ⺆ --> ⼓ (3)
+ : ⺆ --> ⼏ (4)
+ : ⺆ --> 九 (4)
+ : 丨 --> ⼁ (0)
+ : 丨 --> ⼃ (2)
+ : 丨 --> 丿 (2)
+ : 丨 --> ⼅ (2)
 
 This is the most important part of the project.
 After the module is refined, more examples will be added.
