@@ -6,5 +6,13 @@
 4.1 python abcNLP stroke  (to generate stroke table)
 4.2 python abcNLP variant (to generate variant table)
 5. generate extended tables in db
+5.1 python abcNLP-Ext.py tongyin
+5.2 python abcNLP-Ext.py default
+5.3 python abcNLP-Ext.py decomp
+5.4 python abcNLP-Ext.py decompext
+----------
+TBD:
+6. combine all tables in one big table.
+7. generate a small size db (for frequently used characters)
 
 
