@@ -1,0 +1,10 @@
+1. use "python csvReader.py strokedistance.csv" to generate the "definition string"
+2. copy the "definition string" to abcNLP.py
+"class abcNLPChar::BH" and "class abcNLPChar::RL"
+3. rm *.db , to get a clean starting
+4. generate db and basic tables in db
+4.1 python abcNLP stroke  (to generate stroke table)
+4.2 python abcNLP variant (to generate variant table)
+5. generate extended tables in db
+
+
