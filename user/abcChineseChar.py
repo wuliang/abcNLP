@@ -31,7 +31,13 @@ def scoreCount(array):
     return count
 
 class abcChineseChar:
-
+    '''
+        BH = Bi Hua (Stroke)
+        TY = Tong Yin (Reading)
+        YT = Yi Ti (other writing form)
+        DP = Decompositions
+        DE = Extended Decompositions
+    '''
     TYPES = ['BH',  'TY',  'YT',  'DP',  'DE']
     LONGWORD = 4
     CHARVARNUM = 3
@@ -51,8 +57,10 @@ class abcChineseChar:
         
     def getDbVariantChar(self,  char):
         c = self.conn.cursor()
-        q = "SELECT Variant, Type, Score FROM FullCharacterVariant WHERE ChineseCharacter = ?"
+        q = "SELECT Variant, Type, Score FROM AllinoneCharacterVariant WHERE ChineseCharacter = ?"
         rows = c.execute(q, (char, )).fetchall()
+        for row in rows:
+            print "%s --> %s [%s] (%d)" % (char,  row[0],  row[1],  row[2])
         return rows
     
     def getCacheVariantChar(self,  char):
@@ -98,7 +106,7 @@ class abcChineseChar:
             chars_list.append(x)
         return chars_list    
 
-    def getHxWords(self, word, includes=[],  excludes=[], maxnum=-1):
+    def getHxWords(self, word, includes=[],  excludes=['DE'], maxnum=-1):
         chars_vars={}
         
         if includes and excludes:
@@ -135,9 +143,10 @@ class abcChineseChar:
             
  
 def main():
-
+    word = u'茉莉花'
+         
     abc = abcChineseChar()    
-    for word in abc.getHxWords(u'茉莉花',  maxnum=5):
+    for word in abc.getHxWords(word,  maxnum=5):
         print word    
 
 

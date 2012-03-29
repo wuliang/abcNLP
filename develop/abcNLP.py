@@ -165,9 +165,15 @@ class abcNLPChar(characterlookup.CharacterLookup):
         distance_base = (len_move - 1) * abcNLPChar.MAXBHDIS
         for i in range(0, len_move):
             distance = distance_base
+            same_cnt = 0
+            diff_cnt = 0            
             for j in range (0, len_s):
                 if (order_s[j] != order_l[i+j]):
                     distance = distance + abcNLPChar.RL[ bh_s[j] * abcNLPChar.BHLEN + bh_l[i+j] ]
+                    diff_cnt = diff_cnt + 1
+                else:
+                    same_cnt = same_cnt + 1
+            #distance = diff_cnt - same_cnt + (len_l -len_s) --- old form
             if (distance < distance_min):
                 distance_min = distance
         return distance_min
@@ -205,7 +211,7 @@ class abcNLPChar(characterlookup.CharacterLookup):
         whole = len(orderDict)
         count = 0
         for src, srcValue in orderDict.items():
-            distances = [ (500, ""),  (500, ""), (500, ""), (500, ""),  (500, "") ] 
+            distances = [ (500, ""),  (500, ""), (500, "") ] 
 
             srcIdc = srcValue[0]
             srcOrder = srcValue[1]
@@ -228,9 +234,9 @@ class abcNLPChar(characterlookup.CharacterLookup):
             for distance in distances:
                 if (distance[0] == 500):
                     break
-                #print "%s --> %s (%d)" % (src,  distance[1],  distance[0])
+                print "%s --> %s (%d)" % (src,  distance[1],  distance[0])
                     
-                db.insert_char_variant(src,  distance[1], distance[0])    
+                #db.insert_char_variant(src,  distance[1], distance[0])    
 
             if count % (whole / 100 + 1) == 0:
                 per = (count/float(whole))*100.0

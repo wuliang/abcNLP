@@ -27,7 +27,7 @@ class abcSql:
         
         self.conn.cursor().close()
         self.conn.close()
-    
+            
     def recreate_stroke_order(self):
         c = self.conn.cursor()
         c.execute("DROP TABLE IF EXISTS FullStrokeOrder")
@@ -41,6 +41,24 @@ class abcSql:
   PRIMARY KEY (ChineseCharacter)) """)        
         self.commit() 
 
+    def recreate_allinone_variant(self):
+        c = self.conn.cursor()
+        c.execute("DROP TABLE IF EXISTS AllinoneCharacterVariant")
+        self.commit() 
+        
+        c.execute("""
+CREATE TABLE AllinoneCharacterVariant (
+	ChineseCharacter VARCHAR(1) NOT NULL, 
+	Variant VARCHAR(1) NOT NULL, 
+	Type VARCHAR(1) NOT NULL, 
+    Score INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY ("ChineseCharacter", "Variant", "Type"))""")
+
+        c.execute("""
+CREATE INDEX AllinoneCharacterVariant__ChineseCharacter ON AllinoneCharacterVariant (ChineseCharacter)
+        """)        
+        self.commit() 
+        
     def recreate_char_variant(self):
         c = self.conn.cursor()
         c.execute("DROP TABLE IF EXISTS FullCharacterVariant")
@@ -131,6 +149,35 @@ CREATE TABLE DecompextCharacterVariant (
 CREATE INDEX DecompextCharacterVariant__ChineseCharacter ON DecompextCharacterVariant (ChineseCharacter)
         """)        
         self.commit() 
+        
+    def merge_to_one_variant(self):
+        one = "AllinoneCharacterVariant"
+        all = ['FullCharacterVariant', 
+              'TongyinCharacterVariant',  
+              'DefaultCharacterVariant',  
+              'DecompCharacterVariant',  
+              'DecompextCharacterVariant']
+              
+        c = self.conn.cursor()
+        for src in all:
+            c.execute("INSERT INTO %s SELECT * FROM %s" % (one, src))
+            self.commit() 
+        
+    def remove_old_tables(self):
+        all = [
+              # variant table  
+              'FullCharacterVariant', 
+              'TongyinCharacterVariant',  
+              'DefaultCharacterVariant',  
+              'DecompCharacterVariant',  
+              'DecompextCharacterVariant',
+              # stroke order table 
+              'FullStrokeOrder']
+              
+        c = self.conn.cursor()
+        for src in all:
+            c.execute("DROP TABLE IF EXISTS %s" % src)
+            self.commit()         
         
     def insert_stroke_order(self,  word, idc, order):
 

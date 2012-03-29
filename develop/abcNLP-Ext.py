@@ -35,7 +35,8 @@ def generate_tongyin_variant(maxnum=500000):
             tongyins = abc.getCharactersForReading(py[0],  'Pinyin')            
         except:
             continue 
-        # default, the Pinyin is a variant
+        # default, the Pinyin is a variant (score set to 0)
+        db.insert_tongyin_char_variant(src,  py[0],  0)
         # print "%s --> %s (0)" % (src,  py[0])          
         distances = [ (500, ""),  (500, ""), (500, "")] 
         for ty in tongyins:
@@ -57,7 +58,7 @@ def generate_tongyin_variant(maxnum=500000):
         count = count + 1
 
     db.commit() 
-    db.close
+    db.close()
     
 #
 # NOTE: include itself.
@@ -112,7 +113,7 @@ def generate_default_variant(maxnum=500000):
             db.insert_default_char_variant(src,  ext,  0)
             count = count + 1
     db.commit() 
-    db.close
+    db.close()
 
 def generate_decomp_variant(maxnum=500000, depth=1):
     abc = abcNLPChar('C')    
@@ -202,15 +203,63 @@ def generate_decomp_variant(maxnum=500000, depth=1):
                     db.insert_decompext_char_variant(src,  a+b+c,  0)
                 count = count + 1
     db.commit() 
-    db.close
+    db.close()
 
+def generate_bigone_variant():
+    abc = abcNLPChar('C')    
+    db = abcSql("abcNLP.db")
+    db.recreate_allinone_variant()
+    db.merge_to_one_variant()
+    db.close()
+
+def remove_other_variant():
+    abc = abcNLPChar('C')    
+    db = abcSql("abcNLP.db")
+    db.remove_old_tables()
+    db.close()
+
+def query_yes_no(question, default="no"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is one of "yes" or "no".
+    """
+    valid = {"yes":True,   "y":True,  "ye":True,
+             "no":False,     "n":False}
+    if default == None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = raw_input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "\
+                             "(or 'y' or 'n').\n")
+                             
 def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in ["tongyin",  "default", "decomp", "decompext"]:
-        print "Usage:",  sys.argv[0],  "tongyin | default | decomp | decompext "
+    if len(sys.argv) != 2 or sys.argv[1] not in \
+        ["tongyin",  "default", "decomp", "decompext" , "bigone",  "clean"]:
+        print "Usage:",  sys.argv[0],  "tongyin | default | decomp | decompext | bigone | clean"
         print " 'tongyin'  to generate tongyin variant table."
         print " 'default' to generate default variant table (same char with deferent form)"
         print " 'decomp' to generate decomp variant table (split char into 2 or 3 parts)"        
-        print " 'decompext'  similar to decomp, but each part may also be replaced by variant"        
+        print " 'decompext'  similar to decomp, but each part may also be replaced by variant"  
+        print " 'bigone' to merge all variant tables into a bigone " 
+        print " 'clean' to clean up all tables except the bigone "         
         return
 
     opt = sys.argv[1]
@@ -223,6 +272,14 @@ def main():
     elif opt == "decompext":
         # can set depth=2 if needed
         generate_decomp_variant(depth=1)         
+    elif opt == "bigone":
+        generate_bigone_variant()         
+    elif opt == "clean":
+        doit = query_yes_no("All the tables except the 'bigone' will be removed! Are you sure? ")
+        if doit:
+            remove_other_variant()
+        else:
+            return
     print "OK."
 
             
