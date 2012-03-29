@@ -35,30 +35,38 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
   - for example :
 
   - output :
-	： Test for 锦:
-	： jǐn
-	： 钅帛
-	： 仅
-	： 尽
-	： 錦
-	： 馑
+   +   ouput of 锦
+   :   abc = abcChineseChar()    
+   :   for char in abc.getHxCharacters(u'锦'):
+   :       print char    		
 
-	： Test for 陈水扁:
-	： <chén><shuǐ><biān>
-	： <阝东><shuǐ><biān>
-	： <chén><shuǐ>边
-	： <阝东><shuǐ>边
-	： 尘<shuǐ><biān>
-	： 臣<shuǐ><biān>
-	： <chén><shuǐ>便
-	： <chén><shuǐ>碥
-	： <chén><shuǐ>艑
-	： <chén>氵<biān>
-	： <阝东><shuǐ>便
-	： <阝东><shuǐ>碥
-	： <阝东><shuǐ>艑
-	： <阝东>氵<biān>
-	： 尘<shuǐ>边
+   :   jǐn
+  :   钅帛
+   :   仅
+   :   尽
+   :   錦
+   :   馑
+
+   +   ouput of  陈水扁:
+   :   abc = abcChineseChar()    
+   :   for word in abc.getHxWords(u'陈水扁',  maxnum=15):
+   :       print word  
+
+   :   <chén><shuǐ><biān>
+   :   <阝东><shuǐ><biān>
+   :   <chén><shuǐ>边
+   :   <阝东><shuǐ>边
+   :    尘<shuǐ><biān>
+   :    臣<shuǐ><biān>
+   :   <chén><shuǐ>便
+   :   <chén><shuǐ>碥
+   :    <chén><shuǐ>艑
+   :   <chén>氵<biān>
+   :    <阝东><shuǐ>便
+   :    <阝东><shuǐ>碥
+   :    <阝东><shuǐ>艑
+   :    <阝东>氵<biān>
+   :    尘<shuǐ>边
 
 	 (~ use db version 1 ~)
 
