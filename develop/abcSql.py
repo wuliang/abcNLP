@@ -10,8 +10,7 @@ import time
 import types
 
 class abcSql:
-    """Database functions to support a Cobe brain. This is not meant
-    to be used from outside."""
+
     def __init__(self, filename):
         if not os.path.exists(filename):
             self.init(filename)

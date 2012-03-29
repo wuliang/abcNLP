@@ -75,7 +75,7 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
 ** Methods to Immune 2 Censorship
 
 *** Semantical Substitutes
-Metaphor related methods. Thi is not used in this project. 
+Metaphor related methods. This method is not used in this project. 
 
 *** Use variants of the  Character
 The variant of a character is alao a valid character. It can be seen

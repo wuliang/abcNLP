@@ -10,9 +10,9 @@
 5.2 python abcNLP-Ext.py default
 5.3 python abcNLP-Ext.py decomp
 5.4 python abcNLP-Ext.py decompext
+6. combine all tables in one big table.
 ----------
 TBD:
-6. combine all tables in one big table.
 7. generate a small size db (for frequently used characters)
 
 
