@@ -2,7 +2,7 @@
 import os
 import sqlite3
 import itertools
- 
+
 def insertionSort(array):
     i = 1
     while i < len(array):
@@ -17,11 +17,13 @@ def rescoreSorted(array, start=0):
     score = start
     newarray=[]
     while i < len(array):
+        if  i > 0 and array[i][0] == array[i-1][0]:
+            score = score - 1
         newarray.append((score,  array[i][1]))
         score = score + 1
         i = i + 1
     return newarray
-      
+
 def scoreCount(array):
     i = 0
     count = 0
@@ -39,6 +41,7 @@ class abcChineseChar:
         DE = Extended Decompositions
     '''
     TYPES = ['BH',  'TY',  'YT',  'DP',  'DE']
+    TYPE2START = {'BH':1, 'TY': 0,  'YT':2,  'DP':0,  'DE':0}
     LONGWORD = 4
     CHARVARNUM = 3
     def __init__(self, filename='abcChinese.db'):
@@ -51,18 +54,16 @@ class abcChineseChar:
         self.cache = {}
 
     def close(self):
-        
+
         self.conn.cursor().close()
         self.conn.close()
-        
+
     def getDbVariantChar(self,  char):
         c = self.conn.cursor()
         q = "SELECT Variant, Type, Score FROM AllinoneCharacterVariant WHERE ChineseCharacter = ?"
         rows = c.execute(q, (char, )).fetchall()
-        for row in rows:
-            print "%s --> %s [%s] (%d)" % (char,  row[0],  row[1],  row[2])
         return rows
-    
+
     def getCacheVariantChar(self,  char):
         try:
             memo = self.cache[char]
@@ -75,12 +76,11 @@ class abcChineseChar:
             for key in memo.keys():
                 insertionSort(memo[key])
                 # tuple can't modify inside, have to new a tuple with new score
-                memo[key] = rescoreSorted(memo[key])
-                
+                memo[key] = rescoreSorted(memo[key], self.TYPE2START[key])
         return memo
-      
+
     def getVariantChar(self, char, types, maxnum=-1):
-        memo = self.getCacheVariantChar(char)     
+        memo = self.getCacheVariantChar(char)
         alist = []
         for type in types:
             if type in memo.keys():
@@ -89,9 +89,9 @@ class abcChineseChar:
         if maxnum > 0 and maxnum < len(alist):
             alist = alist[0 : maxnum+1]
         return alist
-    
+
     def getAllCharVariant(self, word, types, chars_vars):
-        maxnum=-1        
+        maxnum=-1
         if len(word) > self.LONGWORD:
             maxnum=self.CHARVARNUM
         chars_list = []
@@ -104,50 +104,82 @@ class abcChineseChar:
                 else:
                     x = char_vars
             chars_list.append(x)
-        return chars_list    
+        return chars_list
 
-    def getHxWords(self, word, includes=[],  excludes=['DE'], maxnum=-1):
-        chars_vars={}
-        
+    def getHxCharacters(self, char, includes=[],  excludes=['DE', 'BH'], maxnum=-1):
+
         if includes and excludes:
             print " input parameter can't have includes and excludes at same time"
             return
-            
-        if len(word) > self.LONGWORD:
-            print " input parameter string exceed supported max length %d", self.LONGWORD
-            return
-                
+
         if not includes and not excludes:
             types = self.TYPES
         elif includes:
             types = [type for type in self.TYPES if type in includes]
         elif excludes:
             types = [type for type in self.TYPES if type not in excludes]
-            
-        chars_list = self.getAllCharVariant(word, types, chars_vars)        
+
+        alist = self.getVariantChar(char, types, maxnum=maxnum)
+        return [ x[1] for x in alist ]
+
+    def getHxWords(self, word, includes=[],  excludes=['DE', 'BH'], maxnum=-1):
+        chars_vars={}
+
+        if includes and excludes:
+            print " input parameter can't have includes and excludes at same time"
+            return
+
+        if len(word) > self.LONGWORD:
+            print " input parameter string exceed supported max length %d", self.LONGWORD
+            return
+
+        if not includes and not excludes:
+            types = self.TYPES
+        elif includes:
+            types = [type for type in self.TYPES if type in includes]
+        elif excludes:
+            types = [type for type in self.TYPES if type not in excludes]
+
+        chars_list = self.getAllCharVariant(word, types, chars_vars)
         combines = list(itertools.product(*chars_list))
         sorted = []
         for combine in combines:
-            sorted.append((scoreCount(combine), combine))                    
-        insertionSort(sorted)        
+            sorted.append((scoreCount(combine), combine))
+        insertionSort(sorted)
 
         count = 0
         for score, combine in sorted:
-            if maxnum >= 0 and count >= maxnum: 
+            if maxnum >= 0 and count >= maxnum:
                 break
             fulltext = ""
             for item in combine:
-                fulltext += item[1]
-            count += 1 
+                if len(item[1]) > 1:
+                    fulltext += '<' + item[1].replace(" ", "") + '>'
+                else:
+                    fulltext += item[1]
+            count += 1
             yield fulltext
-            
- 
+
+
 def main():
-    word = u'茉莉花'
-         
-    abc = abcChineseChar()    
-    for word in abc.getHxWords(word,  maxnum=5):
-        print word    
+    word = u'陈水扁'
+
+    abc = abcChineseChar()
+    # Test fetching the Character
+    print "=" * 80
+    ch_test = u'锦'
+    print "Test for %s:" % ch_test
+    print "=" * 20
+    ch_list = abc.getHxCharacters(ch_test)
+    for r in ch_list:
+        print r
+
+    # Test fetching the Word
+    print "=" * 80
+    print "Test for %s:" % word
+    print "=" * 20
+    for word in abc.getHxWords(word,  maxnum=15):
+        print word
 
 
 if __name__ == "__main__":
