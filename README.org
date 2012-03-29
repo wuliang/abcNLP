@@ -34,9 +34,8 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
     (~ use tempory db, need to refine ~)
   - for example :
 
-   - output :
+  - output :
 	： Test for 锦:
-	： ====================
 	： jǐn
 	： 钅帛
 	： 仅
@@ -45,7 +44,6 @@ hard understood to SYSTEM, but not to human, we make the expression "Immune 2 Ce
 	： 馑
 
 	： Test for 陈水扁:
-	： ====================
 	： <chén><shuǐ><biān>
 	： <阝东><shuǐ><biān>
 	： <chén><shuǐ>边
@@ -158,7 +156,7 @@ After the module is refined, more examples will be added.
 
 * ToBeDone
 ** two Database (Sqlite3) 
-one of full set of characters,
+one of full set of characters, (ok, has released)
 one of small set of frequently used characters.
 
 
