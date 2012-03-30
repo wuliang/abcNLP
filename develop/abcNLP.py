@@ -234,9 +234,9 @@ class abcNLPChar(characterlookup.CharacterLookup):
             for distance in distances:
                 if (distance[0] == 500):
                     break
-                print "%s --> %s (%d)" % (src,  distance[1],  distance[0])
+                #print "%s --> %s (%d)" % (src,  distance[1],  distance[0])
                     
-                #db.insert_char_variant(src,  distance[1], distance[0])    
+                db.insert_char_variant(src,  distance[1], distance[0])    
 
             if count % (whole / 100 + 1) == 0:
                 per = (count/float(whole))*100.0
