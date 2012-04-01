@@ -162,15 +162,12 @@ This is the most important part of the project.
 After the module is refined, more examples will be added.
 
 
-* ToBeDone
-** two Database (Sqlite3) 
-one of full set of characters, (ok, has released)
-one of small set of frequently used characters.
-
 
 ** release
 1.  Sun Mar 25 17:54:46 CST 2012 ,initial version
 2.  Thu Mar 29 01:30:37 CST 2012, re-establish Repository
+3.  Sun Apr  1 12:04:11 CST 2012, two db with different size 
+
 by wuliang [www.wuliang.cn at gmail.com]
 
 
