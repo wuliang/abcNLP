@@ -161,26 +161,3 @@ class abcChineseChar:
             yield fulltext
 
 
-def main():
-    word = u'陈水扁'
-
-    abc = abcChineseChar()
-    # Test fetching the Character
-    print "=" * 80
-    ch_test = u'锦'
-    print "Test for %s:" % ch_test
-    print "=" * 20
-    ch_list = abc.getHxCharacters(ch_test)
-    for r in ch_list:
-        print r
-
-    # Test fetching the Word
-    print "=" * 80
-    print "Test for %s:" % word
-    print "=" * 20
-    for word in abc.getHxWords(word,  maxnum=15):
-        print word
-
-
-if __name__ == "__main__":
-    main()

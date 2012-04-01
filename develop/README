@@ -12,8 +12,18 @@
 5.4 python abcNLP-Ext.py decompext
 6. combine all tables in one big table (and clear others)
 6.1 python abcNLP-Ext.py bigone
-----------
-TBD:
 7. generate a small size db (for frequently used characters)
+7.1 get a character frequenty table (from other project)
+7.2 generate a new small size table (following steps as reference)
+*START*
+shell> cp abcChinese.db abcChineseLimit.db
+shell> sqlite3 abcChineseLimit.db
+sqlite> ATTACH 'abcFrequency.db' AS freq;
+sqlite> create TABLE newone AS SELECT DISTINCT main.AllinoneCharacterVariant.ChineseCharacter, main.AllinoneCharacterVariant.Variant, main.AllinoneCharacterVariant.Type, main.AllinoneCharacterVariant.Score FROM main.AllinoneCharacterVariant, freq.CharacterFrequency WHERE main.AllinoneCharacterVariant.ChineseCharacter = freq.CharacterFrequency.ChineseCharacter;
+sqlite> drop table AllinoneCharacterVariant;
+sqlite> ALTER TABLE newone RENAME TO AllinoneCharacterVariant;
+sqlite> vacuum AllinoneCharacterVariant;
+sqlite> .quit
+*END*
 
 
